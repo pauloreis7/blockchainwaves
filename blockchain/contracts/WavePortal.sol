@@ -17,8 +17,8 @@ contract WavePortal {
 
     Wave[] waves;
 
-    constructor() {
-        console.log("my first solidity smart contract");
+    constructor() payable {
+        console.log("waves solidity smart contract");
     }
 
     function addWave(string memory _message) public {
@@ -28,6 +28,16 @@ contract WavePortal {
         waves.push(Wave(msg.sender, _message, block.timestamp));
 
         emit NewWaveEvent(msg.sender, block.timestamp, _message);
+
+        uint256 prizeAmount = 0.0001 ether;
+
+        require(
+            prizeAmount <= address(this).balance,
+            "Trying to withdraw more money than the contract has."
+        );
+
+        (bool success, ) = (msg.sender).call{value: prizeAmount}("");
+        require(success, "Failed to withdraw money from contract.");
     }
 
     function getAllWaves() public view returns (Wave[] memory) {

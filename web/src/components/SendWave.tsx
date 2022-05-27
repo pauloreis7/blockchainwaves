@@ -22,6 +22,12 @@ export function SendWave({ getAllWaves }: SendWaveProps) {
       return;
     }
 
+    if (!userWaveMessage) {
+      console.log("no message present :/");
+
+      return;
+    }
+
     try {
       const provider = new providers.Web3Provider(ethereum);
       const signer = provider.getSigner();

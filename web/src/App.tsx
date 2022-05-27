@@ -11,7 +11,7 @@ import { Header } from "./components/Header";
 import { SendWave } from "./components/SendWave";
 import { Message } from "./components/Message";
 
-const contractAddress = "0xD5617531733D19DD7CC1D6e28e1608C8278476E2";
+const contractAddress = "0x3540fB3bAC84347fDB425157B8210a510B61Fb07";
 
 type WaveProps = {
   waverAddress: string;
