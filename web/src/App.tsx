@@ -2,8 +2,12 @@ import { useEffect } from "react";
 import { Flex, Heading, Text, Button } from "@chakra-ui/react";
 import { useWeb3React } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
+import { providers, Contract } from "ethers";
 
 import { metamask } from "./services/walletConnectors";
+import contractABI from "./utils/WavePortal.json";
+
+const contractAddress = "0x6eb0612df7B2E813D60Bf6FB3863892307224C4A";
 
 export function App() {
   const { account, activate } = useWeb3React<Web3Provider>();
@@ -16,6 +20,40 @@ export function App() {
       activate(metamask);
     }
   }, []);
+
+  async function handleWave() {
+    const { ethereum } = window as any;
+
+    if (!ethereum) {
+      console.log("not ethereum web :/");
+
+      return;
+    }
+
+    try {
+      const provider = new providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+
+      const wavePortalContract = new Contract(
+        contractAddress,
+        contractABI.abi,
+        signer
+      );
+
+      let totalWaves = await wavePortalContract.getTotalWaves();
+
+      const sendWaveTransaction = await wavePortalContract.addWave();
+      console.log("mining hash:", sendWaveTransaction.hash);
+
+      sendWaveTransaction.wait();
+      console.log("mined hash:", sendWaveTransaction.hash);
+
+      totalWaves = await wavePortalContract.getTotalWaves();
+      console.log("current waves count", totalWaves.toNumber());
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <Flex w="100%" h="100vh" flexDirection="column" alignItems="center" p="14">
@@ -45,9 +83,25 @@ export function App() {
         the waves portal
       </Heading>
 
-      <Text textAlign="center" fontSize="2xl" color="gray.300" fontWeight="500">
+      <Text
+        textAlign="center"
+        mb="14"
+        fontSize="2xl"
+        color="gray.300"
+        fontWeight="500"
+      >
         The amazing portal where you can wave to your friends by blockchain!
       </Text>
+
+      <Button
+        colorScheme="blue"
+        fontSize="2xl"
+        px="14"
+        py="6"
+        onClick={handleWave}
+      >
+        Wave to me
+      </Button>
     </Flex>
   );
 }
