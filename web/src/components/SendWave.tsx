@@ -4,13 +4,12 @@ import { providers, Contract } from "ethers";
 
 import contractABI from "../utils/WavePortal.json";
 
-const contractAddress = "0xD5617531733D19DD7CC1D6e28e1608C8278476E2";
-
 type SendWaveProps = {
+  contractAddress: string;
   getAllWaves: () => Promise<void>;
 };
 
-export function SendWave({ getAllWaves }: SendWaveProps) {
+export function SendWave({ contractAddress, getAllWaves }: SendWaveProps) {
   const [userWaveMessage, setUserWaveMessage] = useState("");
 
   async function handleWave() {

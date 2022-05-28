@@ -10,7 +10,7 @@ async function main() {
   let contractBalance = await hre.ethers.provider.getBalance(waveContract.address)
   console.log("contract balance:", hre.ethers.utils.formatEther(contractBalance))
 
-  let addWaveTransaction = await waveContract.addWave("Ex message!")
+  let addWaveTransaction = await waveContract.addWave("Im a wave! #1")
   await addWaveTransaction.wait()
 
   contractBalance = await hre.ethers.provider.getBalance(waveContract.address)

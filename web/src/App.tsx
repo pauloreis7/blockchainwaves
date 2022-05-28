@@ -11,7 +11,7 @@ import { Header } from "./components/Header";
 import { SendWave } from "./components/SendWave";
 import { Message } from "./components/Message";
 
-const contractAddress = "0x3540fB3bAC84347fDB425157B8210a510B61Fb07";
+const contractAddress = "0x1cc9E3B12e06ae60c490258Ff4f153910E514A93";
 
 type WaveProps = {
   waverAddress: string;
@@ -103,7 +103,7 @@ export function App() {
         The amazing portal where you can wave to your friends by blockchain!
       </Text>
 
-      <SendWave getAllWaves={getAllWaves} />
+      <SendWave contractAddress={contractAddress} getAllWaves={getAllWaves} />
 
       <Flex
         w="100%"
