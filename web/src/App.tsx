@@ -11,7 +11,7 @@ import { Header } from "./components/Header";
 import { SendWave } from "./components/SendWave";
 import { Message } from "./components/Message";
 
-const contractAddress = "0x1cc9E3B12e06ae60c490258Ff4f153910E514A93";
+const contractAddress = "0x0396AABca8d18CD7CbB4543B639F46FEF019F89A";
 
 type WaveProps = {
   waverAddress: string;
@@ -26,11 +26,35 @@ export function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    const { ethereum } = window as any;
+
+    if (!ethereum) {
+      console.log("not ethereum web :/");
+
+      return;
+    }
+
     if (!account) {
       activate(metamask);
     }
 
+    const provider = new providers.Web3Provider(ethereum);
+    const signer = provider.getSigner();
+    const wavePortalContract = new Contract(
+      contractAddress,
+      contractABI.abi,
+      signer
+    );
+
+    wavePortalContract.on("NewWaveEvent", getAllWaves);
+
     getAllWaves();
+
+    return () => {
+      if (wavePortalContract) {
+        wavePortalContract.off("NewWaveEvent", getAllWaves);
+      }
+    };
   }, []);
 
   async function getAllWaves() {

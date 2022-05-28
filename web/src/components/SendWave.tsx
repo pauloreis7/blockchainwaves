@@ -37,20 +37,17 @@ export function SendWave({ contractAddress, getAllWaves }: SendWaveProps) {
         signer
       );
 
-      let totalWaves = await wavePortalContract.getTotalWavesCount();
-
       const sendWaveTransaction = await wavePortalContract.addWave(
-        userWaveMessage
+        userWaveMessage,
+        { gasLimit: 300000 }
       );
       console.log("mining hash:", sendWaveTransaction.hash);
 
       sendWaveTransaction.wait();
       console.log("mined hash:", sendWaveTransaction.hash);
 
-      totalWaves = await wavePortalContract.getTotalWavesCount();
+      const totalWaves = await wavePortalContract.getTotalWavesCount();
       console.log("current waves count", totalWaves.toNumber());
-
-      await getAllWaves();
     } catch (err) {
       console.log(err);
     }
